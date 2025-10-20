@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rogue-like RPG - Safehouse</title>
+    <link rel="stylesheet" href="style.css">
+    <script type="module" src="main.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">ROGUE-LIKE RPG</div>
+            <div class="player-stats">
+                <div class="stat">
+                    <span class="stat-value" id="hp-value">100/100</span>
+                    <span class="stat-label">HEALTH</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value" id="stamina-value">80/80</span>
+                    <span class="stat-label">STAMINA</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value" id="weight-value">45/120</span>
+                    <span class="stat-label">WEIGHT</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value" id="armor-value">0</span>
+                    <span class="stat-label">ARMOR</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value" id="level-value">1</span>
+                    <span class="stat-label">LEVEL</span>
+                </div>
+            </div>
+        </header>
+        
+        <div class="main-content">
+            <!-- Collapsible Navigation Panel -->
+            <div class="nav-panel" id="nav-panel">
+                <button class="nav-toggle" id="nav-toggle">☰</button>
+                
+                <div class="nav-sections">
+                    <!-- Safehouse Section -->
+                    <div class="nav-section" data-section="safehouse">
+                        <h3 class="section-title">SAFEHOUSE</h3>
+                        <div class="subsection-buttons">
+                            <button class="subsection-btn active" data-subsection="storage">Storage Stash</button>
+                            <button class="subsection-btn" data-subsection="crafting">Crafting Station</button>
+                            <button class="subsection-btn" data-subsection="merging">Merging Station</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Character Section -->
+                    <div class="nav-section" data-section="character">
+                        <h3 class="section-title">CHARACTER</h3>
+                        <div class="subsection-buttons">
+                            <button class="subsection-btn" data-subsection="equipment">Equipment</button>
+                            <button class="subsection-btn" data-subsection="skills">Skills & Perks</button>
+                            <button class="subsection-btn" data-subsection="stats">Player Stats</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Actions Section -->
+                    <div class="nav-section">
+                        <h3 class="section-title">ACTIONS</h3>
+                        <button class="nav-action-btn" id="start-run">Start Run</button>
+                        <button class="nav-action-btn" id="save-game">Save Game</button>
+                        <button class="nav-action-btn" id="reset-game">Reset Game</button>
+                        <button class="nav-action-btn" id="debug-toggle">Debug Menu</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Main Content Pages -->
+            <div class="page-container">
+                <!-- Landing Page -->
+                <div class="page active" id="landing-page">
+                    <div class="page-header">
+                        <h2>APOCALYPSE SURVIVOR</h2>
+                        <p class="subtitle">Year 2025 - Rogue-like RPG</p>
+                    </div>
+                    
+                    <div class="landing-content">
+                        <div class="welcome-card">
+                            <h3>Welcome to Your Safehouse</h3>
+                            <p>This is your base of operations in the apocalyptic world. Manage your resources, craft equipment, and prepare for scavenging runs.</p>
+                            
+                            <div class="quick-stats">
+                                <div class="quick-stat">
+                                    <span class="stat-value" id="landing-health">100/100</span>
+                                    <span class="stat-label">Health</span>
+                                </div>
+                                <div class="quick-stat">
+                                    <span class="stat-value" id="landing-stamina">80/80</span>
+                                    <span class="stat-label">Stamina</span>
+                                </div>
+                                <div class="quick-stat">
+                                    <span class="stat-value" id="landing-level">1</span>
+                                    <span class="stat-label">Level</span>
+                                </div>
+                            </div>
+                            
+                            <button class="cta-button" id="enter-safehouse">Enter Safehouse</button>
+                        </div>
+                        
+                        <div class="recent-activity">
+                            <h4>Recent Activity</h4>
+                            <div class="activity-list" id="activity-list">
+                                <div class="activity-item">No recent runs</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Safehouse Pages -->
+                <div class="page" id="safehouse-page">
+                    <div class="page-header">
+                        <h2>SAFEHOUSE</h2>
+                        <p>Manage your resources and equipment</p>
+                    </div>
+                    
+                    <!-- Storage Stash Subpage -->
+                    <div class="subpage active" id="storage-subpage">
+                        <h3 class="subpage-title">Storage Stash</h3>
+                        <p>Upgrade your storage to keep more items (Current: 40 slots)</p>
+                        <div class="inventory-grid" id="storage-grid">
+                            <!-- Inventory slots will be generated here -->
+                        </div>
+                    </div>
+                    
+                    <!-- Crafting Station Subpage -->
+                    <div class="subpage" id="crafting-subpage">
+                        <h3 class="subpage-title">Crafting Station</h3>
+                        <p>Use resources to craft new items and upgrades</p>
+                        
+                        <div class="crafting-filters">
+                            <button class="filter-button active" data-filter="all">All</button>
+                            <button class="filter-button" data-filter="consumables">Consumables</button>
+                            <button class="filter-button" data-filter="equipment">Equipment</button>
+                            <button class="filter-button" data-filter="upgrades">Upgrades</button>
+                        </div>
+                        
+                        <div class="crafting-list" id="crafting-recipes">
+                            <!-- Crafting recipes will be populated by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <!-- Merging Station Subpage -->
+                    <div class="subpage" id="merging-subpage"></div>
+                </div>
+                
+                <!-- Character Pages -->
+                <div class="page" id="character-page">
+                    <div class="page-header">
+                        <h2>CHARACTER</h2>
+                        <p>Manage your equipment, skills, and statistics</p>
+                    </div>
+                    
+                    <!-- Equipment Subpage -->
+                    <div class="subpage active" id="equipment-subpage">
+                        <h3 class="subpage-title">Character Equipment</h3>
+                        <p>Manage your equipped items and gear</p>
+                        
+                        <div class="character-equipment">
+                            <div class="equipment-row">
+                                <div class="equipment-slot" data-slot="headwear">
+                                    <div class="slot-label">Headwear</div>
+                                    <div class="slot-content"></div>
+                                </div>
+                                <div class="equipment-slot" data-slot="mask">
+                                    <div class="slot-label">Mask</div>
+                                    <div class="slot-content"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="equipment-row">
+                                <div class="equipment-slot" data-slot="shirt">
+                                    <div class="slot-label">Shirt</div>
+                                    <div class="slot-content"></div>
+                                </div>
+                                <div class="equipment-slot" data-slot="jacket">
+                                    <div class="slot-label">Jacket</div>
+                                    <div class="slot-content"></div>
+                                </div>
+                                <div class="equipment-slot" data-slot="backpack">
+                                    <div class="slot-label">Backpack</div>
+                                    <div class="slot-content"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="equipment-row">
+                                <div class="equipment-slot" data-slot="shoulders">
+                                    <div class="slot-label">Shoulders</div>
+                                    <div class="slot-content"></div>
+                                </div>
+                                <div class="equipment-slot" data-slot="armwraps">
+                                    <div class="slot-label">Armwraps</div>
+                                    <div class="slot-content"></div>
+                                </div>
+                                <div class="equipment-slot" data-slot="hands">
+                                    <div class="slot-label">Hands</div>
+                                    <div class="slot-content"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="equipment-row">
+                                <div class="equipment-slot" data-slot="belt">
+                                    <div class="slot-label">Belt</div>
+                                    <div class="slot-content"></div>
+                                </div>
+                                <div class="equipment-slot" data-slot="pants">
+                                    <div class="slot-label">Pants</div>
+                                    <div class="slot-content"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="equipment-row">
+                                <div class="equipment-slot weapon-slot" data-slot="primaryHand">
+                                    <div class="slot-label">Primary Hand</div>
+                                    <div class="slot-content"></div>
+                                </div>
+                                <div class="equipment-slot weapon-slot" data-slot="secondaryHand">
+                                    <div class="slot-label">Secondary Hand</div>
+                                    <div class="slot-content"></div>
+                                </div>
+                                <div class="equipment-slot weapon-slot" data-slot="backWeapon">
+                                    <div class="slot-label">Back Weapon</div>
+                                    <div class="slot-content"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="equipment-row">
+                                <div class="equipment-slot" data-slot="socks">
+                                    <div class="slot-label">Socks</div>
+                                    <div class="slot-content"></div>
+                                </div>
+                                <div class="equipment-slot" data-slot="shoes">
+                                    <div class="slot-label">Shoes</div>
+                                    <div class="slot-content"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Moved equipped items grid here -->
+                        <div class="equipped-items-section">
+                            <h4>Equipped Items</h4>
+                            <div class="inventory-grid" id="equipped-grid">
+                                <!-- Equipped items will be generated here -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Skills & Perks Subpage -->
+                    <div class="subpage" id="skills-subpage"></div>
+                    
+                    <!-- Player Stats Subpage -->
+                    <div class="subpage" id="stats-subpage">
+                        <h3 class="subpage-title">Player Statistics</h3>
+                        <p>Overview of your character's progress and abilities</p>
+                        
+                        <div class="stats-overview">
+                            <div class="stat-cards">
+                                <div class="stat-card">
+                                    <span class="stat-value">15</span>
+                                    <span class="stat-label">Total Runs</span>
+                                </div>
+                                <div class="stat-card">
+                                    <span class="stat-value">7</span>
+                                    <span class="stat-label">Successful Extractions</span>
+                                </div>
+                                <div class="stat-card">
+                                    <span class="stat-value">23</span>
+                                    <span class="stat-label">Creatures Captured</span>
+                                </div>
+                                <div class="stat-card">
+                                    <span class="stat-value">12</span>
+                                    <span class="stat-label">Items Crafted</span>
+                                </div>
+                            </div>
+                            
+                            <div class="attribute-bars">
+                                <h4>Attributes</h4>
+                                <div class="stat-bar">
+                                    <div class="stat-bar-label">
+                                        <span>Health</span>
+                                        <span>100</span>
+                                    </div>
+                                    <div class="bar">
+                                        <div class="bar-fill" style="width: 100%"></div>
+                                    </div>
+                                </div>
+                                <div class="stat-bar">
+                                    <div class="stat-bar-label">
+                                        <span>Stamina</span>
+                                        <span>80</span>
+                                    </div>
+                                    <div class="bar">
+                                        <div class="bar-fill" style="width: 80%"></div>
+                                    </div>
+                                </div>
+                                <div class="stat-bar">
+                                    <div class="stat-bar-label">
+                                        <span>Carry Weight</span>
+                                        <span>120</span>
+                                    </div>
+                                    <div class="bar">
+                                        <div class="bar-fill" style="width: 100%"></div>
+                                    </div>
+                                </div>
+                                <!-- <div class="xray-container" id="xray">
+                                    <div class="single-sprite" style="background-image: url('gamedata/sprites/background.webp'); z-index: 1;"></div>
+                                    <div class="single-sprite" style="background-image: url('gamedata/sprites/average\ v.webp'); z-index: 2;"></div>
+                                    <div class="single-sprite" style="background-image: url('gamedata/sprites/average\ w.webp'); z-index: 3;"></div>
+                                    <div class="animated-sprite" style="background-image: url('gamedata/sprites/human\ big\ -\ avg.webp'); z-index: 4;"></div>
+                                </div> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Run Interface (remains mostly the same) -->
+                <div class="page" id="run-page">
+                    <!-- Your existing run interface goes here -->
+                    <!-- Keep all the run, building, and fight scene HTML -->
+                    <h3 class="panel-title">SCAVENGING RUN</h3>
+                    <p style="color: #a0a0ff; margin-bottom: 10px;">Venture into the ruined world to find supplies. Watch for threats and extract before it's too late.</p>
+                    <div id="run-location-selection" style="margin-bottom: 20px;">
+                        <h4>Select Location</h4>
+                        <div class="location-cards" id="location-cards">
+                            <!-- Location cards will be populated here -->
+                        </div>
+                    </div>
+                    
+                    <div id="run-interface" style="display: none;">
+                        <div class="run-header">
+                            <div class="run-info">
+                                <span id="run-location-name">Location: Unknown</span>
+                                <span id="run-time">Time: 00:00</span>
+                                <span id="run-area">Area: Unknown</span>
+                            </div>
+                            <div class="run-stats">
+                                <span>Health: <span id="run-health">100</span>/100</span>
+                                <span>Stamina: <span id="run-stamina">100</span>/100</span>
+                                <span>Moves: <span id="run-moves">0</span></span>
+                            </div>
+                        </div>
+                        
+                        <div class="map-container">
+                            <div class="map-grid" id="map-grid">
+                                <!-- Map tiles will be generated here -->
+                            </div>
+                            <div class="map-legend">
+                                <h4>Map Legend</h4>
+                                <div class="legend-item">
+                                    <div class="tile player"></div>
+                                    <span>Your position</span>
+                                </div>
+                                <div class="legend-item">
+                                    <div class="tile unexplored"></div>
+                                    <span>Unexplored</span>
+                                </div>
+                                <div class="legend-item">
+                                    <div class="tile resource"></div>
+                                    <span>Resources</span>
+                                </div>
+                                <div class="legend-item">
+                                    <div class="tile encounter"></div>
+                                    <span>Encounter</span>
+                                </div>
+                                <div class="legend-item">
+                                    <div class="tile safe"></div>
+                                    <span>Safe area</span>
+                                </div>
+                                <div class="legend-item">
+                                    <div class="tile extraction"></div>
+                                    <span>Extraction</span>
+                                </div>
+                                <div class="legend-item">
+                                    <div class="tile special"></div>
+                                    <span>Special</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="run-controls">
+                            <button id="move-up" class="move-btn">↑</button>
+                            <div class="horizontal-controls">
+                                <button id="move-left" class="move-btn">←</button>
+                                <button id="wait" class="move-btn">Wait</button>
+                                <button id="move-right" class="move-btn">→</button>
+                            </div>
+                            <button id="move-down" class="move-btn">↓</button>
+                        </div>
+                        
+                        <div class="run-log" id="run-log">
+                            <h4>Log</h4>
+                            <div class="log-entries"></div>
+                        </div>
+                    </div>
+
+                    <div id="fight-scene" style="display: none;">
+                        <h3 class="panel-title">COMBAT ENCOUNTER</h3>
+                        
+                        <div class="combat-interface">
+                            <div class="combat-background">
+                                <!-- Background will be set based on location -->
+                            </div>
+                            
+                            <div class="combat-participants">
+                                <!-- Player side -->
+                                <div class="combatant player-combatant">
+                                    <div class="combatant-sprite">
+                                        <div class="sprite-placeholder">👤</div>
+                                    </div>
+                                    <div class="combatant-info">
+                                        <div class="combatant-name">Player</div>
+                                        <div class="health-bar">
+                                            <div class="health-bar-fill" id="player-health-bar"></div>
+                                            <span class="health-text" id="player-health-text">100/100</span>
+                                        </div>
+                                        <div class="stamina-bar">
+                                            <div class="stamina-bar-fill" id="player-stamina-bar"></div>
+                                            <span class="stamina-text" id="player-stamina-text">80/80</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Enemy side -->
+                                <div class="combatant enemy-combatant">
+                                    <div class="combatant-sprite">
+                                        <div class="sprite-placeholder" id="enemy-sprite">👹</div>
+                                    </div>
+                                    <div class="combatant-info">
+                                        <div class="combatant-name" id="enemy-name">Enemy</div>
+                                        <div class="health-bar">
+                                            <div class="health-bar-fill" id="enemy-health-bar"></div>
+                                            <span class="health-text" id="enemy-health-text">100/100</span>
+                                        </div>
+                                        <div class="level-badge">Lvl <span id="enemy-level">1</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="combat-log" id="combat-log">
+                                <div class="log-entry">Combat started!</div>
+                            </div>
+                            
+                            <div class="combat-actions" id="combat-actions">
+                                <h4>Choose Action:</h4>
+                                <div class="action-buttons">
+                                    <button class="action-btn" data-action="attack">Attack</button>
+                                    <button class="action-btn" data-action="skill">Skill</button>
+                                    <button class="action-btn" data-action="item">Item</button>
+                                    <button class="action-btn" data-action="flee">Flee</button>
+                                    <button class="action-btn" data-action="capture" id="capture-btn" style="display: none;">Capture</button>
+                                </div>
+                            </div>
+                            
+                            <div class="combat-skills" id="combat-skills" style="display: none;">
+                                <h4>Select Skill:</h4>
+                                <div class="skill-buttons">
+                                    <!-- Skills will be populated dynamically -->
+                                </div>
+                                <button class="back-btn">Back</button>
+                            </div>
+                            
+                            <div class="combat-items" id="combat-items" style="display: none;">
+                                <h4>Select Item:</h4>
+                                <div class="item-buttons">
+                                    <!-- Items will be populated dynamically -->
+                                </div>
+                                <button class="back-btn">Back</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            
+            <div class="panel content-area">
+
+                <div id="run-section" style="display: none;">
+                    
+
+                
+        </div>
+        <div id="debug-panel" style="display: none; position: fixed; bottom: 0; left: 0; right: 0; background: #222; padding: 10px; z-index: 1000;">
+            <h3 style="color: #ff6; margin-bottom: 10px;">Debug Menu</h3>
+            
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <select id="debug-item-select" style="padding: 5px;">
+                    <!-- Options will be populated by JavaScript -->
+                </select>
+                
+                <input type="number" id="debug-item-quantity" value="1" min="1" max="99" style="width: 60px; padding: 5px;">
+                
+                <button id="debug-add-item" style="padding: 5px 10px; background: #4a4; color: white; border: none; border-radius: 3px;">
+                    Add to Stash
+                </button>
+                
+                <button id="debug-close" style="padding: 5px 10px; background: #a44; color: white; border: none; border-radius: 3px;">
+                    Close
+                </button>
+            </div>
+        </div>
+        <footer>
+            <p>Rogue-like RPG SPA | Designed for low-end devices | Persistent storage using browser localStorage</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
