@@ -1,42 +1,16 @@
 import './gameState.js';
 import { selectors } from './selectors.js';
-import { getItemName, updatePlayerStats } from './utility.js';
+import { getItemName } from './utility.js';
 import { items } from '../db/items.js';
+import { equipmentUI } from './equipmentUI.js'
 
 export const equipment = {
-    // Initialize equipment UI and event listeners
-    initializeEquipment() {
-        this.renderEquipmentSlots();
+
+    // Primary logic handling submodule
+
+    initialize() {
+        equipmentUI.initializeUI();
         this.setupEquipmentEventListeners();
-    },
-
-    // Render all equipment slots using selectors
-    renderEquipmentSlots() {
-        const equipment = selectors.getEquipment(gameState);
-        const slots = document.querySelectorAll('.equipment-slot');
-        
-        slots.forEach(slot => {
-            const slotType = slot.getAttribute('data-slot');
-            const item = equipment[slotType];
-            
-            this.renderEquipmentSlot(slot, slotType, item);
-        });
-    },
-
-    // Render individual equipment slot
-    renderEquipmentSlot(slotElement, slotType, item) {
-        slotElement.classList.remove('filled');
-        const contentElement = slotElement.querySelector('.slot-content');
-        contentElement.textContent = '';
-        
-        if (item) {
-            slotElement.classList.add('filled');
-            const displayText = getItemName(item.id).substring(0, 3).toUpperCase();
-            contentElement.textContent = displayText;
-            slotElement.title = getItemName(item.id);
-        } else {
-            slotElement.title = `Empty ${slotType}`;
-        }
     },
 
     // Set up event listeners for equipment slots
@@ -334,23 +308,6 @@ export const equipment = {
         }
     },
 
-    // Get total armor from all equipped items using selectors
-    calculateTotalArmor() {
-        const equipment = selectors.getEquipment(gameState);
-        let totalArmor = 0;
-        
-        Object.values(equipment).forEach(item => {
-            if (item) {
-                const itemData = items.find(i => i.id === item.id);
-                if (itemData?.armor) {
-                    totalArmor += itemData.armor;
-                }
-            }
-        });
-        
-        return totalArmor;
-    },
-
     // Get total weight reduction from equipped items using selectors
     calculateTotalWeightReduction() {
         const equipment = selectors.getEquipment(gameState);
@@ -366,17 +323,6 @@ export const equipment = {
         });
         
         return totalReduction;
-    },
-
-    // Update equipment UI using selectors
-    updateEquipmentUI() {
-        this.renderEquipmentSlots();
-        
-        const totalArmor = this.calculateTotalArmor();
-        const armorElement = document.getElementById('armor-value');
-        if (armorElement) {
-            armorElement.textContent = totalArmor;
-        }
     },
 
     // Get equipped item in specific slot using selector
@@ -397,15 +343,3 @@ export const equipment = {
             .map(([slot, item]) => ({ slot, ...item }));
     }
 };
-
-// Listen for specific slot changes
-Object.keys(selectors.getEquipment(gameState)).forEach(slotType => {
-    gameState.subscribe(`equipment.${slotType}`, (newItem) => {
-        const slotElement = document.querySelector(`[data-slot="${slotType}"]`);
-        if (slotElement) {
-            equipment.renderEquipmentSlot(slotElement, slotType, newItem);
-            equipment.updateEquipmentUI();
-            updatePlayerStats();
-        }
-    });
-});
